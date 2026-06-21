@@ -1,0 +1,171 @@
+[
+{
+  "model": "catalog.product",
+  "pk": 7,
+  "fields": {
+    "name": "Апельсины",
+    "description": "",
+    "image": "",
+    "category": 1,
+    "price": "69.99",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:27:37.314Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "Бананы",
+    "description": null,
+    "image": "",
+    "category": 1,
+    "price": "170.00",
+    "created_at": "2026-06-20",
+    "updated_at": "2026-06-21T09:04:43.499Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 8,
+  "fields": {
+    "name": "Груши Конференц",
+    "description": "",
+    "image": "",
+    "category": 1,
+    "price": "216.99",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:28:25.401Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 6,
+  "fields": {
+    "name": "Киви",
+    "description": "",
+    "image": "",
+    "category": 1,
+    "price": "150.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:39:11.119Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 5,
+  "fields": {
+    "name": "Лимоны",
+    "description": "",
+    "image": "",
+    "category": 1,
+    "price": "54.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:39:34.586Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 9,
+  "fields": {
+    "name": "Лук репчатый",
+    "description": "",
+    "image": "",
+    "category": 2,
+    "price": "35.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:29:07.802Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 13,
+  "fields": {
+    "name": "Молоко 2,5% Село Зеленое",
+    "description": "",
+    "image": "",
+    "category": 3,
+    "price": "99.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:34:01.534Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 12,
+  "fields": {
+    "name": "Молоко 3,2% Село Зеленое",
+    "description": "",
+    "image": "",
+    "category": 3,
+    "price": "101.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:33:08.731Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 11,
+  "fields": {
+    "name": "Перец красный",
+    "description": "",
+    "image": "",
+    "category": 2,
+    "price": "80.50",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:30:14.146Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 4,
+  "fields": {
+    "name": "Помидоры",
+    "description": null,
+    "image": "",
+    "category": 2,
+    "price": "85.00",
+    "created_at": "2026-06-20",
+    "updated_at": "2026-06-20T14:13:54.243Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 15,
+  "fields": {
+    "name": "Сливки 10% Эконива",
+    "description": "",
+    "image": "",
+    "category": 3,
+    "price": "198.99",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:36:36.353Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 14,
+  "fields": {
+    "name": "Сметана 15% Простоквашино",
+    "description": "",
+    "image": "",
+    "category": 3,
+    "price": "97.00",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:35:14.895Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 16,
+  "fields": {
+    "name": "Творог 2% Простоквашино",
+    "description": "",
+    "image": "",
+    "category": 3,
+    "price": "107.99",
+    "created_at": "2026-06-21",
+    "updated_at": "2026-06-21T08:37:28.118Z"
+  }
+}
+]

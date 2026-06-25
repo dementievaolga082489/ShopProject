@@ -1,13 +1,39 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from catalog.models import Product, Category, Contact
 
 
 def home(request):
-    return render(request, "home.html")
+    # Получаем последние 5 созданных продуктов
+    latest_products = Product.objects.all().order_by('-created_at')[:5]
+
+    # Вывод в консоль (для отладки)
+    for i, product in enumerate(latest_products, 1):
+        print(f"{i}. {product.name}")
+        print(f"Цена: {product.price} руб.")
+        print(f"Категория: {product.category.name}")
+        print(f"Создан: {product.created_at.strftime('%d.%m.%Y %H:%M')}")
+
+
+
+    return render(request, "home.html", {
+            'latest_products': latest_products
+        })
 
 
 def contacts(request):
-    return render(request, "contacts.html")
+    # Получаем контактные данные из базы
+    contacts = Contact.objects.first()
+
+    # Получаем все категории для навигации
+    categories = Category.objects.all()
+
+    context = {
+        'contacts': contacts,
+        'categories': categories,
+        'title': 'Контакты',
+    }
+    return render(request, "contacts.html", context)
 
 
 def contact(request):

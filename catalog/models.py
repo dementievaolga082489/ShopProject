@@ -73,3 +73,39 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Contact(models.Model):
+    """
+    Модель для хранения контактной информации
+    """
+    # Контактная информация
+    address = models.TextField(
+        verbose_name='Адрес',
+        help_text='Физический адрес магазина'
+    )
+    phone = models.CharField(
+        max_length=20,
+        verbose_name='Телефон',
+        help_text='Контактный телефон'
+    )
+    email = models.EmailField(
+        verbose_name='Email',
+        help_text='Электронная почта'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Дата обновления'
+    )
+
+    class Meta:
+        verbose_name = 'Контакт'
+        verbose_name_plural = 'Контакты'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Контакты {self.address}."

@@ -40,8 +40,10 @@ class BlogPostUpdateView(UpdateView):
     """Редактирование записи"""
     model = BlogPost
     template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:post_list')
     fields = ['title', 'content', 'preview', 'is_published']
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
 class BlogPostDeleteView(DeleteView):
     """Удаление записи"""

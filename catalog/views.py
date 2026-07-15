@@ -1,6 +1,12 @@
+from gettext import Catalog
+from idlelib.textview import ViewWindow
+
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, View
+
 from catalog.models import Product, Category, Contact
+
 
 
 def home(request):
@@ -17,39 +23,72 @@ def home(request):
     return render(request, "home.html", {"latest_products": latest_products})
 
 
-def contacts(request):
+class ContactView(View):
+    """Страница контактов с использованием View"""
+
+    def get(self, request, *args, **kwargs):
+        # Получаем контактные данные из базы
+        contacts = Contact.objects.first()
+
+        # Получаем все категории для навигации
+        categories = Category.objects.all()
+
+        context = {
+            'contacts': contacts,
+            'categories': categories,
+            'title': 'Контакты',
+        }
+
+        return render(request, 'catalog/contacts.html', context)
+
+
+#def contacts(request):
     # Получаем контактные данные из базы
-    contacts = Contact.objects.first()
+#    contacts = Contact.objects.first()
 
     # Получаем все категории для навигации
-    categories = Category.objects.all()
+#    categories = Category.objects.all()
 
-    context = {
-        "contacts": contacts,
-        "categories": categories,
-        "title": "Контакты",
-    }
-    return render(request, "contacts.html", context)
+#    context = {
+#        "contacts": contacts,
+#        "categories": categories,
+#        "title": "Контакты",
+#    }
+#    return render(request, "contacts.html", context)
+
+    def post(self, request, *args, **kwargs):
+    # Обработка отправки формы обратной связи
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+    # Здесь можно отправить письмо или сохранить в БД
+        messages.success(request, 'Ваше сообщение отправлено!')
+
+        return self.get(request, *args, **kwargs)
+#def contact(request):
+#    if request.method == "POST":
+#        name = request.POST.get("name")
+#        phone = request.POST.get("phone")
+#        message = request.POST.get("message")
+#        return HttpResponse(
+#            f"Спасибо, {name}, контактный телефон - {phone}! Ваше сообщение получено."
+#        )
+#    return render(request, "contacts.html")
+
+class ProductListView(ListView):
+    model = Product
 
 
-def contact(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        message = request.POST.get("message")
-        return HttpResponse(
-            f"Спасибо, {name}, контактный телефон - {phone}! Ваше сообщение получено."
-        )
-    return render(request, "contacts.html")
+#def products_list(request):
+#    products = Product.objects.all()
+#    context = {"products": products}
+#    return render(request, "product_list.html", context)
 
+class ProductDetailView(DetailView):
+    model = Product
 
-def products_list(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, "products_list.html", context)
-
-
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product}
-    return render(request, "product_detail.html", context)
+#def product_detail(request, pk):
+#    product = get_object_or_404(Product, pk=pk)
+#    context = {"product": product}
+#    return render(request, "product_detail.html", context)

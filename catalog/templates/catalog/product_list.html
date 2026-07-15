@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 {% load my_tags %}
 
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            {% for product in products %}
+            {% for product in object_list %}
             <div class="col">
                 <div class="card shadow-sm h-100">
                     <div class="card-img-top" style="height: 300px; overflow: hidden;">

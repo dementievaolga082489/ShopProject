@@ -83,9 +83,8 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">Интернет магазин</h1>
                 <p class="lead text-body-secondary">Доставка свежих продуктов.</p>
-                <p><a href="#" class="btn btn-primary my-2">Main call to action</a> <a href="#"
-                                                                                       class="btn btn-secondary my-2">Secondary
-                    action</a></p></div>
+                <p><a href="{% url 'catalog:product_create' %}" class="btn btn-primary my-2">Добавить продукт</a>
+                </p></div>
         </div>
     </section>
     {% block content %}

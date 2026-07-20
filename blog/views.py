@@ -2,14 +2,21 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 
 from blog.models import BlogPost
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 
 
 class BlogPostListView(ListView):
     """Список всех опубликованных записей блога"""
+
     model = BlogPost
-    template_name = 'blog/post_list.html'
-    context_object_name = 'posts'
+    template_name = "blog/post_list.html"
+    context_object_name = "posts"
 
     def get_queryset(self):
         """Фильтрация записей"""
@@ -19,9 +26,10 @@ class BlogPostListView(ListView):
 
 class BlogPostDetailView(DetailView):
     """Детальная страница блоговой записи"""
+
     model = BlogPost
-    template_name = 'blog/post_detail.html'
-    context_object_name = 'post'
+    template_name = "blog/post_detail.html"
+    context_object_name = "post"
 
     def get_object(self, queryset=None):
         """Увеличиваем счетчик просмотров"""
@@ -29,25 +37,31 @@ class BlogPostDetailView(DetailView):
         obj.increment_views()
         return obj
 
+
 class BlogPostCreateView(CreateView):
     """Создание новой записи"""
+
     model = BlogPost
-    template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:post_list')
-    fields = ['title', 'content', 'preview', 'is_published']
+    template_name = "blog/post_form.html"
+    success_url = reverse_lazy("blog:post_list")
+    fields = ["title", "content", "preview", "is_published"]
+
 
 class BlogPostUpdateView(UpdateView):
     """Редактирование записи"""
+
     model = BlogPost
-    template_name = 'blog/post_form.html'
-    fields = ['title', 'content', 'preview', 'is_published']
+    template_name = "blog/post_form.html"
+    fields = ["title", "content", "preview", "is_published"]
 
     def get_success_url(self):
-        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("blog:post_detail", kwargs={"pk": self.object.pk})
+
 
 class BlogPostDeleteView(DeleteView):
     """Удаление записи"""
+
     model = BlogPost
-    template_name = 'blog/post_confirm_delete.html'
-    context_object_name = 'post'
-    success_url = reverse_lazy('blog:post_list')
+    template_name = "blog/post_confirm_delete.html"
+    context_object_name = "post"
+    success_url = reverse_lazy("blog:post_list")

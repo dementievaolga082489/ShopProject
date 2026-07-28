@@ -20,6 +20,9 @@
                             {{ product.description|truncatechars:100 }}
                         </p>
                         <p class="card-text">Цена: {{ product.price }} руб.</p>
+                        <p class="card-text">
+                            <small class="text-muted">Владелец: {{ product.owner.email|default:"Не указан" }}</small>
+                        </p>
 
                         <div class="mt-auto d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -28,7 +31,33 @@
                                     Посмотреть
                                 </a>
 
+                                {% if user.is_authenticated and product.owner == user %}
+                                    <a class="btn btn-primary" href="{% url 'catalog:product_update' product.pk %}"
+                                       role="button">
+                                        Редактировать
+                                    </a>
+                                {% endif %}
 
+{% if user.is_authenticated and product.owner == user or perms.catalog.can_unpublish_product %}                                    <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}"
+                                       role="button">
+                                        Удалить
+                                    </a>
+                                {% endif %}
+
+ {% if user.is_authenticated and product.owner == user or perms.catalog.can_unpublish_product %}                                    <form action="{% url 'catalog:toggle_publish' product.pk %}"
+                                          method="post"
+                                          style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn {% if product.is_published %}btn-warning{% else %}btn-success{% endif %}">
+                                            {% if product.is_published %}
+                                                Снять с публикации
+                                            {% else %}
+                                                Опубликовать
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             </div>
                             <small class="text-muted">{% now "d.m.Y" %}</small>
                         </div>

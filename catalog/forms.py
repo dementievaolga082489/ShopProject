@@ -1,6 +1,5 @@
 from django import forms
-from django.db.models import BooleanField
-
+from django.forms import BooleanField
 from .models import Product
 
 
@@ -10,11 +9,12 @@ class StyleFormMixin:
         """Инициализация формы с добавлением CSS-классов Bootstrap"""
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            if isinstance(field, BooleanField):
-                field.widget.attrs["class"] = "form-check-input"
-            else:
-                field.widget.attrs["class"] = "form-control"
-
+            # Проверяем, что поле имеет widget и attrs
+            if hasattr(field, 'widget') and hasattr(field.widget, 'attrs'):
+                if isinstance(field, BooleanField):
+                    field.widget.attrs["class"] = "form-check-input"
+                else:
+                    field.widget.attrs["class"] = "form-control"
 
 class ProductForm(StyleFormMixin, forms.ModelForm):
     FORBIDDEN_WORDS = [
@@ -31,11 +31,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = "__all__"
-        widgets = {
-            "description": forms.Textarea(attrs={"rows": 5}),
-            "price": forms.NumberInput(attrs={"step": "0.01"}),
-        }
+        fields = ['name', 'description', 'image', 'category', 'price', 'is_published']
 
     def __init__(self, *args, **kwargs):
         """Дополнительная настройка полей формы"""

@@ -8,13 +8,18 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h3>{% if form.instance.pk %}Редактирование{% else %}Создание{% endif %} записи</h3>
+                    <h3>{% if form.instance.pk %}Редактирование{% else %}Создание{% endif %} продукта</h3>
                 </div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        {{ form.as_p }}  <!-- Автоматический рендеринг формы -->
+                        <!-- Скрытое поле с владельцем (автоматически) -->
+                        {% if form.instance.pk %}
+                            <p class="text-muted">Владелец: {{ form.instance.owner.email }}</p>
+                        {% endif %}
+
+                        {{ form.as_p }}
 
                         <button type="submit" class="btn btn-success">Сохранить</button>
                         <a href="{% url 'catalog:products_list' %}" class="btn btn-secondary">Отмена</a>

@@ -52,10 +52,10 @@ class Product(models.Model):
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='products',
-        verbose_name='Владелец',
+        related_name="products",
+        verbose_name="Владелец",
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:
@@ -63,15 +63,13 @@ class Product(models.Model):
         verbose_name_plural = "Продукты"
         ordering = ["name", "category", "price", "created_at", "updated_at"]
         permissions = [
-            ('can_unpublish_product', 'Может отменять публикацию продукта'),
+            ("can_unpublish_product", "Может отменять публикацию продукта"),
         ]
 
     def __str__(self):
         if self.category:
             return f"{self.name} ({self.category})"
         return self.name
-
-
 
 
 class Category(models.Model):

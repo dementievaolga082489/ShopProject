@@ -1,25 +1,19 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import (
-    MEDIA_ROOT,
-    MEDIA_URL,
-    STATICFILES_DIRS,
-    AUTH_USER_MODEL,
-    LOGIN_REDIRECT_URL,
-    LOGOUT_REDIRECT_URL,
-    SERVER_EMAIL,
-    LOGIN_URL,
-)
+from django.conf.global_settings import (AUTH_USER_MODEL, LOGIN_REDIRECT_URL,
+                                         LOGIN_URL, LOGOUT_REDIRECT_URL,
+                                         MEDIA_ROOT, MEDIA_URL, SERVER_EMAIL,
+                                         STATICFILES_DIRS)
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = "django-insecure-6(gskefxb_$hp45zb+1k2z&p=0vdo9)woi8s+oy*ti4(u$w_+$"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", False) == "True"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -117,11 +111,21 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "users:login"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.yandex.ru"
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = "olga08241989@yandex.ru"
-EMAIL_HOST_PASSWORD = "zfijmlbvfqvwfnsf"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", False) == "True"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", False) == "True"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
+
+CACHE_ENABLED = True
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv("LOCATION"),
+        }
+    }

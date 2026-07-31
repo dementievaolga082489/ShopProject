@@ -1,23 +1,16 @@
-from gettext import Catalog
-from idlelib.textview import ViewWindow
-
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (
-    ListView,
-    DetailView,
-    View,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView, View)
 
 from catalog.forms import ProductForm
-from catalog.models import Product, Category, Contact
+from catalog.models import Category, Contact, Product
+from catalog.services import ProductService
 
 
 def home(request):
@@ -91,19 +84,23 @@ class ContactView(View):
 
 class ProductListView(ListView):
     model = Product
-    context_object_name = 'products'
+    template_name = 'catalog/product_list.html'
+    context_object_name = "products"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
 
         # Добавляем права для каждого продукта
-        for product in context['products']:
+        for product in context["products"]:
             product.can_edit = user.is_authenticated and product.owner == user
             product.can_delete = user.is_authenticated and (
-                    product.owner == user or user.has_perm('catalog.can_unpublish_product')
+                product.owner == user or user.has_perm("catalog.can_unpublish_product")
             )
         return context
+
+    def get_queryset(self):
+        return ProductService.get_all_products_cached()
 
 
 # def products_list(request):
@@ -115,16 +112,14 @@ class ProductListView(ListView):
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         product = self.object
 
-        context['can_edit'] = user.is_authenticated and product.owner == user
-        context['can_delete'] = user.is_authenticated and (
-                product.owner == user or user.has_perm('catalog.can_unpublish_product')
+        context["can_edit"] = user.is_authenticated and product.owner == user
+        context["can_delete"] = user.is_authenticated and (
+            product.owner == user or user.has_perm("catalog.can_unpublish_product")
         )
         return context
 
@@ -134,15 +129,18 @@ def toggle_publish(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
     # Проверяем права
-    if product.owner != request.user and not request.user.has_perm('catalog.can_unpublish_product'):
+    if product.owner != request.user and not request.user.has_perm(
+        "catalog.can_unpublish_product"
+    ):
         messages.error(request, "Нет прав для изменения статуса")
-        return redirect('catalog:products_list')
+        return redirect("catalog:products_list")
 
     product.is_published = not product.is_published
     product.save()
 
     messages.success(request, f"Статус публикации изменен")
-    return redirect('catalog:products_list')
+    return redirect("catalog:products_list")
+
 
 # def product_detail(request, pk):
 #    product = get_object_or_404(Product, pk=pk)
@@ -179,14 +177,30 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "catalog/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:products_list")
-    context_object_name = 'product'
+    context_object_name = "product"
 
     def dispatch(self, request, *args, **kwargs):
         product = self.get_object()
         # Владелец или модератор может удалять
-        if product.owner != request.user and not request.user.has_perm('catalog.can_unpublish_product'):
+        if product.owner != request.user and not request.user.has_perm(
+            "catalog.can_unpublish_product"
+        ):
             messages.error(request, "У вас нет прав для удаления.")
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
 
+def category_products_view(request, category_id):
+    """
+    Отображение продуктов по категории
+    """
+    category = get_object_or_404(Category, id=category_id)
+    products = ProductService.get_products_by_category(category_id)
+
+    context = {
+        "category": category,
+        "products": products,
+        "all_categories": Category.objects.all(),  # Для навигации
+    }
+
+    return render(request, "catalog/products_by_category.html", context)

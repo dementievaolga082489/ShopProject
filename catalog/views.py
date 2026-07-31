@@ -84,6 +84,7 @@ class ContactView(View):
 
 class ProductListView(ListView):
     model = Product
+    template_name = 'catalog/product_list.html'
     context_object_name = "products"
 
     def get_context_data(self, **kwargs):
@@ -97,6 +98,9 @@ class ProductListView(ListView):
                 product.owner == user or user.has_perm("catalog.can_unpublish_product")
             )
         return context
+
+    def get_queryset(self):
+        return ProductService.get_all_products_cached()
 
 
 # def products_list(request):
